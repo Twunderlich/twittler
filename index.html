@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html>
   <head>
+    <link rel="stylesheet" type="text/css" href="stylesheet.css">
     <script src="jquery.js"></script>
     <script src="data_generator.js"></script>
   </head>
@@ -16,9 +17,9 @@
         var updateFeed = function(startPoint) {
           var index = streams.home.length - 1;
           while(index >= startPoint){
-            var tweet = streams.home[index];
-            var $tweet = $('<div></div>');
-            $tweet.text('@' + tweet.user + ': ' + tweet.message);
+            var tweet           = streams.home[index];
+            var $tweet     = $('<div class="tweet"></div>');
+            $tweet.text('@' + tweet.user + ': ' + tweet.message + ' - ' + tweet.created_at);
             $tweet.appendTo($body);
             index -= 1;
           }
@@ -32,9 +33,16 @@
 
         getNewTweets(startIndex);
 
+        var $contentSection = $('<section class="content"></section>');
+        $contentSection.prependTo($body);
+
+        var $aside = $('<aside></aside>');
+        $aside.prependTo($body);
+
         var $showNewTweets = $('<button type="button"></button>');
         $showNewTweets.text('Show new Tweets');
-        $showNewTweets.prependTo($body);
+        $showNewTweets.prependTo($contentSection);
+
 
         $('button').on('click', function() {
           getNewTweets(startIndex);
