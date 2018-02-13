@@ -1,53 +1,76 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <link rel="stylesheet" type="text/css" href="stylesheet.css">
+    <!-- <link rel="stylesheet" type="text/css" href="stylesheet.css"> -->
     <script src="jquery.js"></script>
     <script src="data_generator.js"></script>
   </head>
   <body>
+
+    <header>
+      <h1><p>TWITTLER</p></h1>
+    </header>
+
+    <section id="contentSection">
+      <h3 class="heading"><p>TWITS</p></h3>
+      <button type="button"></button>
+    </section><!--  
+
+ --><aside id="followers">
+      <h3><p>FOLLOWING</p></h3>
+      <div class="user">All Twits</div>
+    </aside>
+
     <script>
 
-      $(document).ready(function(){
-        var $body = $('body');
-        $body.html('');
-
+      $(document).ready(function() {
+        var $body           = $('body');
+        var $section        = $('section');
+        var $contentSection = $('.contentSection')
+        var $header         = $('header');
+        var $aside          = $('aside');
+        
         var startIndex = 0;
-
         var updateFeed = function(startPoint) {
           var index = streams.home.length - 1;
-          while(index >= startPoint){
-            var tweet           = streams.home[index];
-            var $tweet     = $('<div class="tweet"></div>');
-            $tweet.text('@' + tweet.user + ': ' + tweet.message + ' - ' + tweet.created_at);
-            $tweet.appendTo($body);
+          while (index >= startPoint){
+            var twit   = streams.home[index];
+            var $twit  = $('<div class="twit"></div>');
+            $twit.text('@' + twit.user + ': ' + twit.message + ' - ' + twit.created_at);
+            $twit.appendTo($section);
             index -= 1;
           }
         };
         
-        var getNewTweets = function(startPoint) {
+        var getNewTwits = function(startPoint) {
           if (streams.home.length - 1 > startIndex) {
             updateFeed(startPoint);
           }
         };
 
-        getNewTweets(startIndex);
+        getNewTwits(startIndex);
 
-        var $contentSection = $('<section class="content"></section>');
-        $contentSection.prependTo($body);
-
-        var $aside = $('<aside></aside>');
-        $aside.prependTo($body);
-
-        var $showNewTweets = $('<button type="button"></button>');
-        $showNewTweets.text('Show new Tweets');
-        $showNewTweets.prependTo($contentSection);
-
-
+        $('button').text('Show new Twits');
         $('button').on('click', function() {
-          getNewTweets(startIndex);
+          getNewTwits(startIndex);
         });
 
+        var follower = users.length - 1
+        while (follower >= 0) {
+          var user = users[follower];
+          var $user = $('<div class="user"></div>');
+          $user.text(user);
+          $user.appendTo($aside);
+          follower -= 1;
+        }
+        
+        $('#followers').on('click', 'div', function() {
+          $(this).closest('aside').find('div').removeClass('highlight');
+          $(this).addClass('highlight');
+          // alert('test');
+          // $('.highlight').removeClass('highlight');
+          // $(this).addClass('highlight');
+        });
 
       });
 
