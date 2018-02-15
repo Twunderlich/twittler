@@ -18,7 +18,7 @@
 
         /* populate following list */
 
-        var getFollowees = function() {
+        function getFollowees() {
           var index = users.length - 1;
           while (index >= 0) {
             var followee = users[index];
@@ -26,16 +26,16 @@
             $followee.text(users[index]);
             $followee.appendTo('.following');
             index -= 1
+            $followee.click(filterByUser)
           }
         };
 
-        $('.followee').on('click', function() { 
+        function filterByUser() {
           var $name = $(this).text();
-          $('.active').hide();
-          $('.active').remove("active");
-          $('.' + $name).addClass("active")
-          $('.active').show(); 
-        });
+          // alert('.twit .' + $name);
+          $('.twit').hide();
+          $('.' + $name).show();
+        }
 
 
         getFollowees();
@@ -49,12 +49,11 @@
           startIndex = streams.home.length - 1;
           newTwits.forEach(function(ele, i) {
             var twit = streams.home[i];
-            var $twit = $('<article class="twit active ' + twit.user + '" />');
+            var $twit = $('<article class="twit ' + twit.user + '" />');
 
             $twit.html('<a href="#">@' + twit.user + '</a>:<blockquote> ' +     twit.message + '</blockquote><time>' + twit.created_at + '</time>');
             $content.append($twit);
           });
-
         }
 
         // var getAllTwits = function(startPoint) {
