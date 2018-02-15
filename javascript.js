@@ -16,7 +16,7 @@
         // updateTime();
 
 
-        // populate following list
+        /* populate following list */
 
         var getFollowees = function() {
           var index = users.length - 1;
@@ -29,10 +29,19 @@
           }
         };
 
+        $('.followee').on('click', function() { 
+          var $name = $(this).text();
+          $('.active').hide();
+          $('.active').remove("active");
+          $('.' + $name).addClass("active")
+          $('.active').show(); 
+        });
+
+
         getFollowees();
 
-        // create Twit elements and add them to feed
-          // want to reverse the feed so newest elements always on top
+        /* create Twit elements and add them to feed */
+          // ToDo - want to reverse the feed so newest elements always on top
 
         function getAllTwits(startPoint) {
           var $content = $('.content');
@@ -63,7 +72,7 @@
 
         getAllTwits(startIndex);
 
-        // shows 'show new twits' button
+        /* shows 'show new twits' button */
         var checkForNewTwits = function(){
           if ((streams.home.length - 1) - startIndex > 10) {
             $('#update').slideDown();
@@ -71,9 +80,16 @@
           setTimeout(checkForNewTwits, 500);
         };
 
+        $('#update').on('click', function() {
+          if (streams.home.length - 1 > startIndex) {
+            getAllTwits(startIndex);
+          }
+          $('#update').slideUp();
+        });
+
         checkForNewTwits();
 
-        // get twits per indiviual (not currently used)
+        /* get twits per indiviual (not currently used)*/
         var getTwits = function(person) {
           var twitter = person;
           var index = streams.users[twitter].length - 1;
@@ -86,24 +102,5 @@
             index -= 1;
           }
         };
-
-
-      // update feed button
-        $('#update').on('click', function() {
-          // alert(startIndex);
-          if (streams.home.length - 1 > startIndex) {
-            getAllTwits(startIndex);
-          }
-          $('#update').slideUp();
-        });
-
-      // select individual user
-        $('.followee').on('click', function() {
-          var $name = $(this).text();
-          $('.active').hide();
-          $('.active').remove("active");
-          $('.' + $name).addClass("active")
-          $('.active').show();
-        });
 
       });
