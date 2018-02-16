@@ -17,12 +17,13 @@ $(document).ready(function(){
 
   function getAllTwits(startPoint) {
     var $content = $('.content');
+    alert(JSON.stringify(streams.home.slice(startPoint)))
     var allTwits = streams.home.slice(startPoint);
     allTwits.forEach(function(ele, i) {
-      var twit = streams.home[i];
+      var twit = ele;
       var $twit = $('<article class="twit ' + twit.user + '" />');
 
-      $twit.html('<a href="#">@' + twit.user + '</a>:<blockquote> ' +     twit.message + '</blockquote><time>' + twit.created_at + '</time>');
+      $twit.html('<a href="' + twit.user + '.html">@' + twit.user + '</a>:<blockquote> ' +     twit.message + '</blockquote><time>' + twit.created_at + '</time>');
       $content.append($twit);
     });
 
@@ -33,17 +34,26 @@ $(document).ready(function(){
     var $content = $('.content');
     var userTwits = streams.users[person].slice(startPoint);
     userTwits.forEach(function(ele, i) {
-      var twit = ele
+      var twit = ele;
       var $twit = $('<article class="twit ' + twit.user + '" />');
 
-      $twit.html('<a href="#">@' + twit.user + '</a>:<blockquote> ' +     twit.message + '</blockquote><time>' + twit.created_at + '</time>');
+      $twit.html('<a href="' + twit.user + '.html">@' + twit.user + '</a>:<blockquote> ' +     twit.message + '</blockquote><time>' + twit.created_at + '</time>');
       $content.append($twit);
     });
     startIndex = streams.users[person].length - 1;
   };
 
   function checkForNewTwits(){
-    if ((streams.home.length - 1) - startIndex > 10) {
+    var length;
+    var twitNum = 10;
+    if (currentUser === 'Me') {
+      length = streams.home.length;
+    } else {
+      length = streams.users[currentUser].length;
+      twitNum = 2;
+    }
+
+    if ((length - 1) - startIndex > twitNum) {
       $('#update').slideDown();
     }
     setTimeout(checkForNewTwits, 500);
@@ -52,9 +62,11 @@ $(document).ready(function(){
   checkForNewTwits();
 
   $('#update').on('click', function() {
-      alert(startIndex);
+    if (currentUser === 'Me') {
       getAllTwits(startIndex);
-      startIndex = streams.home.length - 1;
+    } else {
+      getUserTwits(currentUser, startIndex);
+    }
     $('#update').slideUp();
   });
 
